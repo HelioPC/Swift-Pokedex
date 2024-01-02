@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 
 struct ContentView: View {
     @ObservedObject var pokemonVM = PokemonViewModel()
@@ -51,10 +50,22 @@ struct ContentView: View {
                             
                             Spacer()
                             
-                            KFImage(URL(string: poke.imageURL))
-                                .interpolation(.none)
-                                .resizable()
-                                .frame(width: 100, height: 100)
+                            AsyncImage(url: URL(string: poke.imageURL)) { phase in
+                                switch phase {
+                                case .empty:
+                                    ProgressView()
+                                case .success(let image):
+                                    image
+                                        .interpolation(.high)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(maxWidth: 100, maxHeight: 100)
+                                case .failure:
+                                    Image(systemName: "photo")
+                                @unknown default:
+                                    EmptyView()
+                                }
+                            }
                         }
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {

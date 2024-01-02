@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Kingfisher
+//import Kingfisher
 
 struct PokemonDetailView: View {
     var pokemon: Pokemon
@@ -22,7 +22,7 @@ struct PokemonDetailView: View {
                     .italic()
                     .foregroundColor(pokemon.typeColor)
                 
-                PokemonImageView(image: KFImage(URL(string: pokemon.imageURL)))
+                PokemonImageView(image: pokemon.imageURL)
                     .padding(.bottom, -100)
                     .zIndex(1)
                 
