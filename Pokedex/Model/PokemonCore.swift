@@ -1,11 +1,11 @@
 //
-//  PokemonViewModel.swift
+//  PokemonCore.swift
 //  Pokedex
 //
-//  Created by Eliude Vemba on 29/05/22.
+//  Created by Eliude Vemba on 13/01/24.
 //
 
-import SwiftUI
+import Foundation
 
 struct APIResponse: Decodable {
     let count: Int
@@ -20,7 +20,7 @@ struct PokemonResponse: Decodable, Identifiable {
     let id: Int
     let name: String
     
-    var  url: URL {
+    var url: URL {
         URL(string: "https://img.pokemondb.net/artwork/large/\(name).jpg")!
     }
     
@@ -55,13 +55,71 @@ struct Pokemon: Identifiable, Decodable {
     private (set) var pokeID = UUID()
     var isFavorite = false
     
+    var url: URL {
+        URL(string: "https://img.pokemondb.net/artwork/large/\(name.lowercased()).jpg")!
+    }
+    
     let id: Int
     let name: String
     let height: Int
     let weight: Int
     let stats: [Stats]
     let types: [PokemonTypes]
+    let abilities: [Ability]
 }
+
+struct PokemonSpecies: Decodable {
+    let id: Int
+    let name: String
+    let gender_rate: Int
+    let flavor_text_entries: [FlavorText]
+    let capture_rate: Int
+    let color: MyColor
+    let genera: [Genera]
+    let egg_groups: [EggGroup]
+    let hatch_counter: Int
+    let evolution_chain: EvolutionChain
+    let growth_rate: GrowthRate
+}
+
+struct FlavorText: Decodable {
+    let flavor_text: String
+    let language: Language
+}
+
+struct Ability: Decodable {
+    let ability: AbilityName
+}
+
+struct AbilityName: Decodable {
+    let name: String
+}
+
+struct Genera: Decodable {
+    let genus: String
+    let language: Language
+}
+
+struct EvolutionChain: Decodable {
+    let url: String
+}
+
+struct GrowthRate: Decodable {
+    let name: String
+}
+
+struct EggGroup: Decodable {
+    let name: String
+}
+
+struct Language: Decodable {
+    let name: String
+}
+
+struct MyColor: Decodable {
+    let name: String
+}
+
 
 struct Stats: Decodable {
     let base_stat: Int
@@ -87,10 +145,4 @@ extension Pokemon: Equatable {
     static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id
     }
-}
-
-enum FetchError: Error {
-    case badUrl
-    case badResponse
-    case badData
 }
