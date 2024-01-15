@@ -26,12 +26,12 @@ class PokemonViewModel: ObservableObject {
         self.id = id
 
         Task {
-            pokemon = try await getPokemon(id: id)
-            pokemonSpecies = try await getPokemonSpecies(id: id)
+            pokemon = try await getPokemon()
+            pokemonSpecies = try await getPokemonSpecies()
         }
     }
     
-    func getPokemon(id: Int) async throws -> Pokemon {
+    func getPokemon() async throws -> Pokemon {
         guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(id)")
         else { throw FetchError.badUrl }
         
@@ -45,7 +45,7 @@ class PokemonViewModel: ObservableObject {
         return maybePokemonData
     }
 
-    func getPokemonSpecies(id: Int) async throws -> PokemonSpecies {
+    func getPokemonSpecies() async throws -> PokemonSpecies {
         guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon-species/\(id)")
         else { throw FetchError.badUrl }
         
@@ -64,9 +64,15 @@ class PokemonViewModel: ObservableObject {
         id: 1, name: "bulbasaur", height: 7, weight: 69,
         stats: [
             Stats(base_stat: 45, effort: 0, stat: Stat(name: "hp")),
+            Stats(base_stat: 49, effort: 0, stat: Stat(name: "attack")),
+            Stats(base_stat: 49, effort: 0, stat: Stat(name: "defense")),
+            Stats(base_stat: 65, effort: 1, stat: Stat(name: "sp. attack")),
+            Stats(base_stat: 65, effort: 0, stat: Stat(name: "sp. defense")),
+            Stats(base_stat: 45, effort: 0, stat: Stat(name: "speed")),
         ],
         types: [
             PokemonTypes(slot: 1, type: PokemonType(name: "grass")),
+            PokemonTypes(slot: 2, type: PokemonType(name: "poison")),
         ],
         abilities: [
             Ability(ability: AbilityName(name: "overgrow")),
